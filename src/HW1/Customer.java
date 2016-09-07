@@ -5,13 +5,13 @@ import java.util.List;
 public class Customer
 {
     // is the wait time the customer is going to have
-    private int originalWaitTime;
-    private int waitTime;
+    private int joinedLineTime;
+    private int waitTick;
 
-    public Customer()
+    public Customer(int joinedLineTime)
     {
-        this.waitTime = 2 * howManyItems() + 10;
-        originalWaitTime = waitTime;
+        this.joinedLineTime = joinedLineTime;
+        this.waitTick = 2 * howManyItems() + 10;
     }
 
     // determines how many items this customer is going to get
@@ -35,14 +35,14 @@ public class Customer
         return smallestLine;
     }
 
-    public int getOriginalWaitTime()
-    {
-        return originalWaitTime;
-    }
-
     public int waited()
     {
-        waitTime--;
-        return waitTime;
+        waitTick--;
+        return waitTick;
+    }
+
+    public int getWaitTime(int exitedLineTime)
+    {
+        return exitedLineTime - joinedLineTime;
     }
 }

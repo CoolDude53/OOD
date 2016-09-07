@@ -21,11 +21,12 @@ public class BetterDiningHallSimulation
         {
             if (aCustomerArrives())
             {
-                Customer newCustomer = new Customer();
+                Customer newCustomer = new Customer(t);
                 newCustomer.smallestRegister(registers).addCustomerInLine(newCustomer);
             }
 
-            registers.forEach(CashRegister::elapseOneSecond);
+            for (CashRegister register : registers)
+                register.elapseOneSecond(t);
         }
 
         // Print out the statistics.

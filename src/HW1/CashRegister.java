@@ -13,10 +13,10 @@ public class CashRegister
         customersInLine.add(customer);
     }
 
-    private void customerServed(Customer customer)
+    private void customerServed(Customer customer, int exitLineTime)
     {
         customersInLine.remove(customer);
-        totalWaitTime += customer.getOriginalWaitTime();
+        totalWaitTime += customer.getWaitTime(exitLineTime);
         customersServed++;
     }
 
@@ -35,7 +35,7 @@ public class CashRegister
         return totalWaitTime / customersServed;
     }
 
-    public void elapseOneSecond()
+    public void elapseOneSecond(int time)
     {
         // If the list is empty, there are no customers to process.
         if (getLine() == 0)
@@ -45,6 +45,6 @@ public class CashRegister
 
         // Otherwise, the first customer in line gets processed.
         if (firstCustomer.waited() <= 0)
-            customerServed(firstCustomer);
+            customerServed(firstCustomer, time);
     }
 }
