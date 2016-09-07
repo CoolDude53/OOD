@@ -11,12 +11,12 @@ public class CashRegister
     public void addCustomerInLine(Customer customer)
     {
         customersInLine.add(customer);
-        totalWaitTime += customer.getWaitTime();
     }
 
-    public void customerServed(Customer customer)
+    private void customerServed(Customer customer)
     {
         customersInLine.remove(customer);
+        totalWaitTime += customer.getOriginalWaitTime();
         customersServed++;
     }
 
@@ -41,14 +41,10 @@ public class CashRegister
         if (getLine() == 0)
             return;
 
-        // Otherwise, the first customer in line gets processed.
-        if (customersInLine.get(0).waited() <= 0)
-        {
-            // First update the register's statistics.
-            customersServed++;
+        Customer firstCustomer = customersInLine.get(0);
 
-            // Then remove the customer.
-            customersInLine.remove(0);
-        }
+        // Otherwise, the first customer in line gets processed.
+        if (firstCustomer.waited() <= 0)
+            customerServed(firstCustomer);
     }
 }

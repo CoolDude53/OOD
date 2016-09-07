@@ -10,10 +10,6 @@ public class BetterDiningHallSimulation
 
     private static ArrayList<CashRegister> registers = new ArrayList<>();
 
-    // statistics about the cash registers
-    private static int[] customersServed = new int[NUM_REGISTERS]; // del HW1.CashRegister
-    private static int[] totalWaitTimes = new int[NUM_REGISTERS]; // del HW1.Customer
-
     public static void main(String[] args)
     {
         // First, initialize the cash register arrays.
@@ -29,8 +25,7 @@ public class BetterDiningHallSimulation
                 newCustomer.smallestRegister(registers).addCustomerInLine(newCustomer);
             }
 
-            for (CashRegister register : registers)
-                register.elapseOneSecond();
+            registers.forEach(CashRegister::elapseOneSecond);
         }
 
         // Print out the statistics.
