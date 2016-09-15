@@ -1,4 +1,7 @@
-package HW2;
+package HW2.players;
+
+import HW2.Game;
+import HW2.utils.Utils;
 
 import java.util.ArrayList;
 

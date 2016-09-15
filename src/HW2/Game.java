@@ -1,5 +1,11 @@
 package HW2;
 
+import HW2.players.ComputerPlayer;
+import HW2.players.HumanPlayer;
+import HW2.players.Player;
+import HW2.utils.Difficulty;
+import HW2.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

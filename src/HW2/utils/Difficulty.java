@@ -1,4 +1,4 @@
-package HW2;
+package HW2.utils;
 
 public enum Difficulty
 {
