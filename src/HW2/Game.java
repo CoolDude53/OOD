@@ -3,7 +3,7 @@ package HW2;
 import HW2.players.ComputerPlayer;
 import HW2.players.HumanPlayer;
 import HW2.players.Player;
-import HW2.utils.Difficulty;
+import HW2.players.logic.Difficulty;
 import HW2.utils.Utils;
 
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ public class Game
     private Scanner scanner = new Scanner(System.in);
     private long startTime = System.currentTimeMillis();
     private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<String> namesInUse = new ArrayList<>();
     private int playerUpNum = 0;
     private Player playerUp;
     private Player winner = null;
@@ -35,6 +36,7 @@ public class Game
 
         int humanPlayers = scanner.nextInt();
 
+        // handles negative numbers
         while (humanPlayers < 0)
         {
             System.out.println("Maybe you misunderstood...");
@@ -43,20 +45,23 @@ public class Game
             humanPlayers = scanner.nextInt();
         }
 
+        // handles human player creation
         while (humanPlayers > 0)
         {
             System.out.println("Hello new player, may I ask your name?");
 
             HumanPlayer player = new HumanPlayer(this, scanner.next());
-            players.add(player);
+            addToGame(player);
 
             System.out.println("Thanks " + player.getName() + "! Please wait while I finish setting up!\n");
             humanPlayers--;
         }
 
+        // prints the list of human players, if any, before moving on to the computer players
         if (players.size() > 0)
             System.out.println("Thank you for entering the game " + getPlayerNames() + "!");
 
+        // handles requirements based on number of human players
         if (players.size() == 0)
             System.out.println("How many computer players will be playing today? (Atleast 2 required)");
         else if (players.size() == 1)
@@ -66,6 +71,7 @@ public class Game
 
         int computerPlayers = scanner.nextInt();
 
+        // handles invalid number of computer players (0 human players requires 2 computer players)
         while (computerPlayers <= 1 && players.size() == 0)
         {
             System.out.println("Maybe you misunderstood...");
@@ -74,6 +80,7 @@ public class Game
             computerPlayers = scanner.nextInt();
         }
 
+        // handles invalid number of computer players (1 human player requires 1 computer player)
         while (computerPlayers <= 0 && players.size() == 1)
         {
             System.out.println("Maybe you misunderstood...");
@@ -82,38 +89,47 @@ public class Game
             computerPlayers = scanner.nextInt();
         }
 
-        if (computerPlayers > 0)
+        // handles computer player generation
+        while (computerPlayers > 0)
         {
-            System.out.println("What computer player difficulty would you like to play against today? (easy, medium, hard, mixed)");
+            ComputerPlayer player = new ComputerPlayer(this);
+
+            System.out.println("What difficulty would you like " + player.getName() + " to have today? (easy, medium, hard)");
 
             Difficulty difficulty = Utils.difficultyFromString(scanner.next());
+
+            // handles invalid difficulty entries
             while (difficulty == null)
             {
                 System.out.println("Maybe you misunderstood...");
-                System.out.println("What computer player difficulty would you like to play against today? (easy, medium, hard, mixed)");
+                System.out.println("What difficulty would you like " + player.getName() + " to have today? (easy, medium, hard)");
 
                 difficulty = Utils.difficultyFromString(scanner.next());
             }
 
-
-            while (computerPlayers > 0)
-            {
-                ComputerPlayer player = new ComputerPlayer(this, difficulty);
-                players.add(player);
-
-                computerPlayers--;
-            }
+            player.setDifficulty(difficulty);
+            addToGame(player);
+            computerPlayers--;
         }
 
+        // set the first player
         playerUp = players.get(0);
-        System.out.println("This is simply wonderful! " + getPlayerNames() + ", let's begin!");
+        System.out.println("\nThis is simply wonderful! " + getPlayerNames() + ", let's begin!");
+    }
+
+    private void addToGame(Player player)
+    {
+        players.add(player);
+        namesInUse.add(player.getName());
     }
 
     private void startPlaying()
     {
+        // while there isn't a winner, the next player up can go
         while (winner == null)
             playerUp.go();
 
+        // dialogue when someone wins
         long duration = System.currentTimeMillis() - startTime;
         System.out.println("\nSweet biscuits! We have a winner!");
         System.out.println("Let's all congratulate " + winner.getName() + ", who finished with " + winner.getChips() + " chips!");
@@ -121,6 +137,7 @@ public class Game
         System.out.println("I'm simply astounded! This game took " + String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(duration), TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)), TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration))) + "!");
     }
 
+    // used to ensure no two players share the same name
     private String getPlayerNames()
     {
         if (players.size() > 1)
@@ -188,5 +205,10 @@ public class Game
     public void resetPot()
     {
         pot = 0;
+    }
+
+    public ArrayList<String> getNamesInUse()
+    {
+        return namesInUse;
     }
 }

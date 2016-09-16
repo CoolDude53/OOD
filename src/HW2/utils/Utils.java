@@ -1,5 +1,10 @@
 package HW2.utils;
 
+import HW2.players.logic.Difficulty;
+import HW2.players.logic.Easy;
+import HW2.players.logic.Hard;
+import HW2.players.logic.Medium;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,6 +14,9 @@ import java.util.stream.Collectors;
 public class Utils
 {
     private static Random rand = new Random();
+    private static Easy easy = new Easy();
+    private static Medium medium = new Medium();
+    private static Hard hard = new Hard();
 
     public static int randInt(int min, int max)
     {
@@ -20,13 +28,11 @@ public class Utils
         switch (string.toLowerCase())
         {
             case "easy":
-                return Difficulty.EASY;
+                return easy;
             case "medium":
-                return Difficulty.MEDIUM;
+                return medium;
             case "hard":
-                return Difficulty.HARD;
-            case "mixed":
-                return Difficulty.MIXED;
+                return hard;
             default:
                 return null;
         }
