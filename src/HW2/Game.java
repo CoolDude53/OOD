@@ -114,7 +114,7 @@ public class Game
 
         // set the first player
         playerUp = players.get(0);
-        System.out.println("\nxThis is simply wonderful! " + getPlayerNames() + ", let's begin!");
+        System.out.println("\nThis is simply wonderful! " + getPlayerNames() + ", let's begin!");
     }
 
     private void addToGame(Player player)
