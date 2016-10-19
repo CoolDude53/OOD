@@ -14,6 +14,6 @@ public class StringLength implements Predicate<String>
     @Override
     public boolean test(String s)
     {
-        return s.length() > length;
+        return s.length() <= length;
     }
 }
